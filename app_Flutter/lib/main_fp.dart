@@ -1,41 +1,10 @@
-import 'dart:html';
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'API.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-Future<Mouse> fetchPy() async {
-  final response = await http
-      .get(Uri.parse('http://127.0.0.1:5000/api?Query=Position%201%202'));
-
-  if (response.statusCode == 200) {
-    return Mouse.fromJson(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to get text');
-  }
-}
-
-class Mouse {
-  final String pos;
-  final int mx;
-  final int my;
-
-  const Mouse({
-    required this.pos,
-    required this.mx,
-    required this.my,
-  });
-
-  factory Mouse.fromJson(Map<String, dynamic> json) {
-    return Mouse(
-      pos: json['pos'],
-      mx: json['mx'],
-      my: json['my'],
-    );
-  }
-}
+// import 'dart:async';
+// import 'API.dart';
+// import 'dart:html';
 
 void main() => runApp(const MyApp());
 
@@ -47,13 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<Mouse> futureMouse;
-
-  @override
-  void initState() {
-    super.initState();
-    futureMouse = fetchPy();
-  }
+  String gett = '';
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +25,36 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('Tongue Mobile'),
         ),
-        body: Center(
-          child: FutureBuilder<Mouse>(
-            future: futureMouse,
-            builder: (context, coordinate) {
-              if (coordinate.hasData) {
-                return Text(coordinate.data!.pos);
-              } else if (coordinate.hasError) {
-                return Text('${coordinate.error}');
-              }
-              return const CircularProgressIndicator();
-            },
+        body: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(gett),
+              Center(
+                child: Container(
+                  width: 150,
+                  height: 60,
+                  child: FlatButton(
+                    color: Colors.blue,
+                    onPressed: () async {
+                      final response =
+                          await http.get('http://127.0.0.1:5000/flut');
+                      final decoded =
+                          json.decode(response.body) as Map<String, dynamic>;
+                      setState(() {
+                        gett = decoded['gett'];
+                      });
+                    },
+                    child: Text(
+                      'Press',
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
