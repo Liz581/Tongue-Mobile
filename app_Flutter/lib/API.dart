@@ -1,6 +1,6 @@
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
-Future Getdata(url) async {
-  http.Response Response = await http.get(url);
-  return Response.body;
+Future getData(url) async {
+  Response response = await get(url);
+  return response.body;
 }
