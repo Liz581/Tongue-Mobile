@@ -37,8 +37,8 @@ class _MyAppState extends State<MyApp> {
                   child: FlatButton(
                     color: Colors.blue,
                     onPressed: () async {
-                      final response =
-                          await http.get('http://127.0.0.1:5000/flut');
+                      final response = await http
+                          .get(Uri.parse('http://127.0.0.1:5000/flut'));
                       final decoded =
                           json.decode(response.body) as Map<String, dynamic>;
                       setState(() {
